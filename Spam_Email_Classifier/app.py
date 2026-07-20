@@ -1,45 +1,11 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[3]:
-
-
 import streamlit as st
 import joblib
+from pathlib import Path
 
-model = joblib.load("random_forest_model.pkl")
-vectorizer = joblib.load("tfidf_vectorizer.pkl")
+BASE_DIR = Path(__file__).resolve().parent
 
-st.title("Spam Email Classifier")
+st.write("App directory:", BASE_DIR)
+st.write("Files:", [p.name for p in BASE_DIR.iterdir()])
 
-email = st.text_area("Enter Email")
-
-if st.button("Predict"):
-    x = vectorizer.transform([email])
-    pred = model.predict(x)[0]
-    prob = model.predict_proba(x)[0]
-
-    if pred == 1:
-        st.error(f"Spam ({prob[1]*100:.2f}%)")
-    else:
-        st.success(f"Ham ({prob[0]*100:.2f}%)")
-
-
-# In[2]:
-
-
-
-
-
-# In[5]:
-
-
-import sys
-print(sys.executable)
-
-
-# In[ ]:
-
-
-
-
+model = joblib.load(BASE_DIR / "random_forest_model.pkl")
+vectorizer = joblib.load(BASE_DIR / "tfidf_vectorizer.pkl")
